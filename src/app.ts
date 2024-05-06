@@ -1,6 +1,6 @@
+import 'dotenv/config';
 import express from 'express';
 import morgan from 'morgan';
-import 'dontenv/config';
 import cors from 'cors';
 import postRouter from './routes/posts';
 import userRouter from './routes/user';
@@ -17,5 +17,5 @@ app.use('/post', postRouter);
 app.use('/user', userRouter);
 
 app.listen(PORT, () => {
-    console.log(`running on port:${PORT}`)
+    console.log(`running on port: ${PORT}`);
 });

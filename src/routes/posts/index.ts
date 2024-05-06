@@ -74,8 +74,7 @@ router.post('/create', loggedMiddleware, async (req, res) => {
         data: {
             userId,
             title,
-            content,
-            useCount: 0
+            content
         }
     });
 
