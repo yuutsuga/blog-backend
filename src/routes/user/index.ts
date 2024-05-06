@@ -98,8 +98,14 @@ router.post('/signin', async (req, res) => {
     }
 
     if (!bcrypt.compareSync(password, user.password)) {
-        return res.status(401).send('passwords do not match.')
+        return res.status(401).send('passwords do not match.');
     }
+
+    const token = jwt.sign({ id: user.id}, SECRET, {
+        expiresIn: '2h'
+    });
+
+    res.status(200).send({ user, token });
 });
 
 // delete user 
