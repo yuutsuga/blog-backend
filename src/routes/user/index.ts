@@ -109,7 +109,7 @@ router.post('/signin', async (req, res) => {
 });
 
 // delete user 
-router.delete('delete', async (req, res) => {
+router.delete('/delete', async (req, res) => {
     const { userId } = req.body;
 
     const deletedUser = await prisma.user.deleteMany({
