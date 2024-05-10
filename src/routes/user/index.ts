@@ -117,29 +117,38 @@ router.get('/', loggedMiddleware, async (req, res) => {
 
 // get user by id
 router.get('/:id', loggedMiddleware, async (req, res) => {
-    const { userId } = res.locals;
+    const { id } = req.params;
 
     const user = await prisma.user.findFirst({
         where: {
-            id: userId
+            id
         },
         select: {
-            name: true,
-            email: true,
-            password: true
+            name: true
         }
     });
+
+    res.status(200).send({ user });
 });
 
 // update user info
 router.put('/update', loggedMiddleware, async (req, res) => {
     const { userId } = res.locals;
+    const { name, email, password } = req.body;
+
+    if (!name || !email || !password) {
+        return res.status(401).send('please fill in all fields');
+    }
     
     const newUser = await prisma.user.updateMany({
         where: {
             id: userId
         },
-        data: { }
+        data: {
+            name,
+            email,
+            password
+        }
     });
 
     res.status(200).send({ newUser });
