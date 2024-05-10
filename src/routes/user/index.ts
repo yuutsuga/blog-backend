@@ -108,9 +108,46 @@ router.post('/signin', async (req, res) => {
     res.status(200).send({ user, token });
 });
 
+// get users 
+router.get('/', loggedMiddleware, async (req, res) => {
+    const users = await prisma.user.findMany({ });
+
+    res.status(200).send({ users });
+});
+
+// get user by id
+router.get('/:id', loggedMiddleware, async (req, res) => {
+    const { userId } = res.locals;
+
+    const user = await prisma.user.findFirst({
+        where: {
+            id: userId
+        },
+        select: {
+            name: true,
+            email: true,
+            password: true
+        }
+    });
+});
+
+// update user info
+router.put('/update', loggedMiddleware, async (req, res) => {
+    const { userId } = res.locals;
+    
+    const newUser = await prisma.user.updateMany({
+        where: {
+            id: userId
+        },
+        data: { }
+    });
+
+    res.status(200).send({ newUser });
+});
+
 // delete user 
-router.delete('/delete', async (req, res) => {
-    const { userId } = req.body;
+router.delete('/delete', loggedMiddleware, async (req, res) => {
+    const { userId } = res.locals;
 
     const deletedUser = await prisma.user.deleteMany({
         where: {
