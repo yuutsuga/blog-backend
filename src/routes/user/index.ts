@@ -134,24 +134,27 @@ router.get('/:id', loggedMiddleware, async (req, res) => {
 // update user info
 router.put('/update', loggedMiddleware, async (req, res) => {
     const { userId } = res.locals;
-    const { name, email, password } = req.body;
+    const { name, email } = req.body;
 
-    if (!name || !email || !password) {
+    if (!name && !email) {
         return res.status(401).send('please fill in all fields');
     }
     
-    const newUser = await prisma.user.updateMany({
+    const updatedUser = await prisma.user.updateMany({
         where: {
             id: userId
         },
         data: {
             name,
             email,
-            password
         }
     });
 
-    res.status(200).send({ newUser });
+    if (!updatedUser.count) {
+        return res.status(400).send({ updated: false });
+    }
+
+    res.status(200).send({ updated: true });
 });
 
 // delete user 
